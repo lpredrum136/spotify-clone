@@ -1,0 +1,10 @@
+yarn create next-app --typescript (do NOT follow https://github.com/vercel/next.js/tree/canary/examples/with-typescript since it's outdated)
+spotify-clone
+
+follow https://tailwindcss.com/docs/guides/nextjs
+yarn add -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+https://developer.spotify.com/
+Dashboard
+Create new app
