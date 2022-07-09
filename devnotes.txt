@@ -5,6 +5,36 @@ follow https://tailwindcss.com/docs/guides/nextjs
 yarn add -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
+INSTALL STUFF
+Heroicons recommended by tailwindcss, 
+Next Auth
+spotify web api wrapper
+yarn add @heroicons/react next-auth spotify-web-api-node
+yarn add -D @types/spotify-web-api-node
+- Node version error when installing next-auth and spotify-web-api-node? nvm use 16
+
 https://developer.spotify.com/
 Dashboard
 Create new app
+(according to https://next-auth.js.org/configuration/providers/oauth#how-to)
+Edit settings => Redirect URIs: http;//localhost:3000/api/auth/callback/spotify
+
+Note: Only play/pause will work (search for playback in spotify dev Dashboard)
+https://developer.spotify.com/design/controls/
+
+AUTH
+https://www.npmjs.com/package/next-auth
+https://next-auth.js.org/getting-started/example
+https://next-auth.js.org/providers/spotify
+https://developer.spotify.com/documentation/general/guides/authorization/scopes/
+https://github.com/thelinmichael/spotify-web-api-node#authorization-code-flow
+https://next-auth.js.org/tutorials/refresh-token-rotation
+
+ENV VARS
+https://nextjs.org/docs/basic-features/environment-variables
+https://next-auth.js.org/configuration/options
+TODO: Try without NEXT_PUBLIC_ on spotify credentials first and see what happens
+
+SPOTIFY WEB API WRAPPER 
+https://developer.spotify.com/documentation/web-api/libraries/
+find in that list: https://github.com/thelinmichael/spotify-web-api-node
