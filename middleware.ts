@@ -30,6 +30,10 @@ export const middleware = async (request: NextRequest) => {
 	// to be exact, from /_next/static/, just look at the log and you'll see
 	if (token || pathname.includes('/api/auth') || pathname.includes('/_next')) {
 		console.log('request allowed!')
+
+		if (pathname === '/login') {
+			return NextResponse.redirect(new URL('/', request.url))
+		}
 		return NextResponse.next()
 	}
 
