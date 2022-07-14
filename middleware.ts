@@ -43,9 +43,7 @@ export const middleware = async (request: NextRequest) => {
 		return NextResponse.redirect(new URL('/login', request.url))
 	}
 
-	// TODO: Redirect to home page if user has a token AND is requesting /login
-
-	// return NextResponse.next()
+	return NextResponse.next()
 }
 
 // See "Matching Paths" below (go to Next doc) to learn more

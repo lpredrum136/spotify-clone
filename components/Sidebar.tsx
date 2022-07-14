@@ -21,7 +21,7 @@ const Sidebar = () => {
 	console.log('SESSION', session)
 
 	return (
-		<div className='text-gray-500 p-5 text-sm border-r border-gray-900'>
+		<div className='text-gray-500 p-5 text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden'>
 			<div className='space-y-4'>
 				<IconButton icon={HomeIcon} label='LOG OUT' onClick={() => signOut()} />
 				<IconButton icon={HomeIcon} label='Home' />
@@ -37,6 +37,38 @@ const Sidebar = () => {
 				<Divider />
 
 				{/* Playlist */}
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
 				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
 				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
 				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>

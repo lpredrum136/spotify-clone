@@ -43,3 +43,10 @@ NEXT JS MIDDLEWARE
 https://next-auth.js.org/configuration/nextjs#middleware
 https://next-auth.js.org/tutorials/securing-pages-and-api-routes
 https://nextjs.org/docs/advanced-features/middleware
+
+WRITE NESTED CSS IN CSS FILE WITH tailwindcss (for scrollbar-hidden)
+https://tailwindcss.com/docs/using-with-preprocessors#nesting
+
+ERROR WHEN TRYING TO ACCESS USER AVATAR IMAGES
+Invalid src prop (https://i.scdn.co/image/ab6775700000ee85cbc5be5b843a437ab657ee8d) on `next/image`, hostname "i.scdn.co" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
