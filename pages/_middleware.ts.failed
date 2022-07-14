@@ -1,0 +1,7 @@
+// This (https://next-auth.js.org/configuration/nextjs#basic-usage) doesn't seem to work,
+// so I upgraded Next to 12.2 (stable middleware)
+// https://nextjs.org/docs/messages/middleware-upgrade-guide
+// and followed
+export { default } from 'next-auth/middleware'
+
+export const config = { matcher: ['/dashboard'] }

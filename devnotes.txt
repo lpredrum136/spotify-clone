@@ -38,3 +38,8 @@ TODO: Try without NEXT_PUBLIC_ on spotify credentials first and see what happens
 SPOTIFY WEB API WRAPPER 
 https://developer.spotify.com/documentation/web-api/libraries/
 find in that list: https://github.com/thelinmichael/spotify-web-api-node
+
+NEXT JS MIDDLEWARE
+https://next-auth.js.org/configuration/nextjs#middleware
+https://next-auth.js.org/tutorials/securing-pages-and-api-routes
+https://nextjs.org/docs/advanced-features/middleware

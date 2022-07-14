@@ -70,6 +70,8 @@ const jwtCallback: CallbacksOptions['jwt'] = async ({
 			accessTokenExpiresAt: (account.expires_at as number) * 1000 // convert to ms to be easier to check
 		}
 
+		console.log('FIRST TIME LOGIN, EXTENDED TOKEN', extendedToken)
+
 		return extendedToken
 	}
 
@@ -87,6 +89,7 @@ const jwtCallback: CallbacksOptions['jwt'] = async ({
 	// * END CODE PART BY SONNY
 
 	// * START MY CODE, I think we don't need to check if token has expired, since NextAuth seems to do this automatically
+	console.log('SUBSEQUENT LOGIN, TOKEN', token)
 	return token
 	// * END MY CODE
 }
@@ -108,9 +111,7 @@ const sessionCallback: CallbacksOptions['session'] = async ({
 	session.user = (token as ExtendedToken).user
 	session.accessToken = (token as ExtendedToken).accessToken
 	session.error = (token as ExtendedToken).error
-
-	// TODO: Sonny has this but where is token.username???
-	// session.username = token.username
+	session.username = (token as ExtendedToken).username
 
 	return session
 }

@@ -6,14 +6,24 @@ import {
 	HeartIcon,
 	RssIcon
 } from '@heroicons/react/outline'
+import { signOut, useSession } from 'next-auth/react'
 import IconButton from './IconButton'
 
 const Divider = () => <hr className='border-t-[0.1px] border-gray-900' />
 
 const Sidebar = () => {
+	const { data: session, status } = useSession()
+
+	// If this console log returns null, it means we are not logged in
+	// if it's undefined, session has not been fetched yet
+	// https://next-auth.js.org/getting-started/client#usesession
+
+	console.log('SESSION', session)
+
 	return (
 		<div className='text-gray-500 p-5 text-sm border-r border-gray-900'>
 			<div className='space-y-4'>
+				<IconButton icon={HomeIcon} label='LOG OUT' onClick={() => signOut()} />
 				<IconButton icon={HomeIcon} label='Home' />
 				<IconButton icon={SearchIcon} label='Search' />
 				<IconButton icon={LibraryIcon} label='Your Library' />
