@@ -26,7 +26,7 @@ const Center = () => {
 	return (
 		<div className='flex-grow text-white relative'>
 			<header className='absolute top-5 right-8'>
-				<div className='flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-2'>
+				<div className='flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full py-1 pl-1 pr-2'>
 					<Image
 						src={session?.user?.image || UserIcon}
 						alt='User Avatar'

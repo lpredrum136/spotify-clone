@@ -15,23 +15,27 @@ const Divider = () => <hr className='border-t-[0.1px] border-gray-900' />
 
 const Sidebar = () => {
 	const { data: session, status } = useSession()
-	const [playlists, setPlaylists] = useState([])
+	const [playlists, setPlaylists] = useState<
+		SpotifyApi.PlaylistObjectSimplified[]
+	>([])
 	const spotifyApi = useSpotify()
 
-	// useEffect(() => {
-	// 	const getUserPlaylists = async () => {
-	// 		const userPlaylists = await spotifyApi.getUserPlaylists()
-	// 		console.log('USER PLAYLISTS', userPlaylists)
-	// 	}
+	useEffect(() => {
+		const getUserPlaylists = async () => {
+			const userPlaylistsResponse = await spotifyApi.getUserPlaylists()
+			setPlaylists(userPlaylistsResponse.body.items)
+		}
 
-	// 	getUserPlaylists()
-	// }, [spotifyApi])
+		if (spotifyApi.getAccessToken()) {
+			getUserPlaylists()
+		}
+	}, [spotifyApi, session])
 
 	// If this console log returns null, it means we are not logged in
 	// if it's undefined, session has not been fetched yet
 	// https://next-auth.js.org/getting-started/client#usesession
 
-	console.log('SESSION', session)
+	// console.log('SESSION', session)
 
 	return (
 		<div className='text-gray-500 p-5 text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden'>
@@ -50,46 +54,11 @@ const Sidebar = () => {
 				<Divider />
 
 				{/* Playlist */}
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
-				<p className='cursor-pointer hover:text-white'>Playlist Name...</p>
+				{playlists.map(playlist => (
+					<p key={playlist.id} className='cursor-pointer hover:text-white'>
+						{playlist.name}
+					</p>
+				))}
 			</div>
 		</div>
 	)

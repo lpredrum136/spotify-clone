@@ -1,30 +1,9 @@
-import NextAuth, { CallbacksOptions, Session, User } from 'next-auth'
-import { JWT } from 'next-auth/jwt'
+import NextAuth, { CallbacksOptions } from 'next-auth'
 import SpotifyProvider from 'next-auth/providers/spotify'
-import { LOGIN_URL, scopes, spotifyApi } from '../../../utils/spotify'
+import { ExtendedToken, TokenError } from '../../../types'
+import { scopes, spotifyApi } from '../../../utils/spotify'
 
 // * THIS WHOLE FILE IS SERVER SIDE
-export enum TokenError {
-	RefreshAccessTokenError
-}
-
-interface ExtendedToken extends JWT {
-	accessToken: string
-	refreshToken: string
-	username: string
-	accessTokenExpiresAt: number
-	user: User
-	// this is probably not necessary since the error only shows up in refreshAccessToken but we're not using it
-	error?: TokenError
-}
-
-export interface ExtendedSession extends Session {
-	accessToken: ExtendedToken['accessToken']
-	// this is probably not necessary since the error only shows up in refreshAccessToken but we're not using it
-	error: ExtendedToken['error']
-	username: ExtendedToken['username']
-}
-
 const refreshAccessToken = async (
 	token: ExtendedToken
 ): Promise<ExtendedToken> => {
@@ -86,20 +65,21 @@ const jwtCallback: CallbacksOptions['jwt'] = async ({
 
 	// Subsequent time: token is now already extended with those properties
 	// Return previous token if the access token has not expired
-	// if (Date.now() < (token as ExtendedToken).accessTokenExpiresAt) {
-	// 	console.log('access token is still valid')
-	// 	return token
-	// }
+	if (Date.now() < (token as ExtendedToken).accessTokenExpiresAt) {
+		console.log('access token is still valid, for subsequent login', token)
+		return token
+	}
 
 	// if access token has expired, refresh it
-	// console.log('access token has expired, refreshing...')
-	// return await refreshAccessToken(token as ExtendedToken)
+	console.log('access token has expired, refreshing...')
+	return await refreshAccessToken(token as ExtendedToken)
 
 	// * END CODE PART BY SONNY
 
 	// * START MY CODE, I think we don't need to check if token has expired, since NextAuth seems to do this automatically
-	console.log('SUBSEQUENT LOGIN, TOKEN', token)
-	return token
+	// * UPDATE: I'm wrong. I thought so because my app lets me in, but it does so just because I have a token
+	// console.log('SUBSEQUENT LOGIN, TOKEN', token)
+	// return token
 	// * END MY CODE
 }
 
