@@ -7,12 +7,25 @@ import {
 	RssIcon
 } from '@heroicons/react/outline'
 import { signOut, useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import useSpotify from '../hooks/useSpotify'
 import IconButton from './IconButton'
 
 const Divider = () => <hr className='border-t-[0.1px] border-gray-900' />
 
 const Sidebar = () => {
 	const { data: session, status } = useSession()
+	const [playlists, setPlaylists] = useState([])
+	const spotifyApi = useSpotify()
+
+	// useEffect(() => {
+	// 	const getUserPlaylists = async () => {
+	// 		const userPlaylists = await spotifyApi.getUserPlaylists()
+	// 		console.log('USER PLAYLISTS', userPlaylists)
+	// 	}
+
+	// 	getUserPlaylists()
+	// }, [spotifyApi])
 
 	// If this console log returns null, it means we are not logged in
 	// if it's undefined, session has not been fetched yet

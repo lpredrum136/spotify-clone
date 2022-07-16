@@ -1,9 +1,10 @@
-import NextAuth, { CallbacksOptions, User } from 'next-auth'
+import NextAuth, { CallbacksOptions, Session, User } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import SpotifyProvider from 'next-auth/providers/spotify'
 import { LOGIN_URL, scopes, spotifyApi } from '../../../utils/spotify'
 
-enum TokenError {
+// * THIS WHOLE FILE IS SERVER SIDE
+export enum TokenError {
 	RefreshAccessTokenError
 }
 
@@ -13,7 +14,15 @@ interface ExtendedToken extends JWT {
 	username: string
 	accessTokenExpiresAt: number
 	user: User
+	// this is probably not necessary since the error only shows up in refreshAccessToken but we're not using it
 	error?: TokenError
+}
+
+export interface ExtendedSession extends Session {
+	accessToken: ExtendedToken['accessToken']
+	// this is probably not necessary since the error only shows up in refreshAccessToken but we're not using it
+	error: ExtendedToken['error']
+	username: ExtendedToken['username']
 }
 
 const refreshAccessToken = async (
@@ -110,6 +119,7 @@ const sessionCallback: CallbacksOptions['session'] = async ({
 }) => {
 	session.user = (token as ExtendedToken).user
 	session.accessToken = (token as ExtendedToken).accessToken
+	// this is probably not necessary since the error only shows up in refreshAccessToken but we're not using it
 	session.error = (token as ExtendedToken).error
 	session.username = (token as ExtendedToken).username
 
