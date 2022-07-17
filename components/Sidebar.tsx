@@ -1,12 +1,12 @@
 import {
+	HeartIcon,
 	HomeIcon,
-	SearchIcon,
 	LibraryIcon,
 	PlusCircleIcon,
-	HeartIcon,
-	RssIcon
+	RssIcon,
+	SearchIcon
 } from '@heroicons/react/outline'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { usePlaylistContext } from '../contexts'
 import useSpotify from '../hooks/useSpotify'
@@ -42,7 +42,6 @@ const Sidebar = () => {
 	return (
 		<div className='text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden sm:max-w-[12rem] lg:max-w-[15rem] hidden md:block'>
 			<div className='space-y-4'>
-				<IconButton icon={HomeIcon} label='LOG OUT' onClick={() => signOut()} />
 				<IconButton icon={HomeIcon} label='Home' />
 				<IconButton icon={SearchIcon} label='Search' />
 				<IconButton icon={LibraryIcon} label='Your Library' />

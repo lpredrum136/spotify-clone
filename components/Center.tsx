@@ -51,7 +51,7 @@ const Center = () => {
 	])
 
 	return (
-		<div className='flex-grow text-white relative'>
+		<div className='flex-grow text-white relative h-screen overflow-y-scroll scrollbar-hidden'>
 			<header className='absolute top-5 right-8'>
 				<div className='flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full py-1 pl-1 pr-2'>
 					<Image
@@ -67,7 +67,7 @@ const Center = () => {
 			</header>
 
 			<section
-				className={`flex items-end space-x-7 bg-gradient-to-b ${fromColour} to-black h-80 text-white p-8`}
+				className={`flex items-end space-x-7 bg-gradient-to-b ${fromColour} to-black h-80 p-8`}
 			>
 				{playlistContextState.selectedPlaylist && (
 					<>
