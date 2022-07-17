@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Center from '../components/Center'
 import Sidebar from '../components/Sidebar'
+import PlaylistContextProvider from '../contexts'
 
 const Home: NextPage = () => {
 	return (
@@ -14,9 +15,10 @@ const Home: NextPage = () => {
 			</Head>
 
 			<main className='flex'>
-				<Sidebar />
-
-				<Center />
+				<PlaylistContextProvider>
+					<Sidebar />
+					<Center />
+				</PlaylistContextProvider>
 			</main>
 
 			<div>{/* Player */}</div>

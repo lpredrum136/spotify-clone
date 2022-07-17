@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/outline'
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { usePlaylistContext } from '../contexts'
 import useSpotify from '../hooks/useSpotify'
 import IconButton from './IconButton'
 
@@ -19,6 +20,7 @@ const Sidebar = () => {
 		SpotifyApi.PlaylistObjectSimplified[]
 	>([])
 	const spotifyApi = useSpotify()
+	const { updatePlaylistContextState } = usePlaylistContext()
 
 	useEffect(() => {
 		const getUserPlaylists = async () => {
@@ -38,7 +40,7 @@ const Sidebar = () => {
 	// console.log('SESSION', session)
 
 	return (
-		<div className='text-gray-500 p-5 text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden'>
+		<div className='text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden sm:max-w-[12rem] lg:max-w-[15rem] hidden md:block'>
 			<div className='space-y-4'>
 				<IconButton icon={HomeIcon} label='LOG OUT' onClick={() => signOut()} />
 				<IconButton icon={HomeIcon} label='Home' />
@@ -54,9 +56,15 @@ const Sidebar = () => {
 				<Divider />
 
 				{/* Playlist */}
-				{playlists.map(playlist => (
-					<p key={playlist.id} className='cursor-pointer hover:text-white'>
-						{playlist.name}
+				{playlists.map(({ id, name }) => (
+					<p
+						key={id}
+						className='cursor-pointer hover:text-white'
+						onClick={() => {
+							updatePlaylistContextState({ selectedPlaylistId: id })
+						}}
+					>
+						{name}
 					</p>
 				))}
 			</div>
