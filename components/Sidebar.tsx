@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/outline'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { usePlaylistContext } from '../contexts'
+import { usePlaylistContext } from '../contexts/PlaylistContext'
 import useSpotify from '../hooks/useSpotify'
 import IconButton from './IconButton'
 

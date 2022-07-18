@@ -1,4 +1,4 @@
-import { usePlaylistContext } from '../contexts'
+import { usePlaylistContext } from '../contexts/PlaylistContext'
 import Song from './Song'
 
 const Songs = () => {

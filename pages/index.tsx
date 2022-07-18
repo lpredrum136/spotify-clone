@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Center from '../components/Center'
 import Sidebar from '../components/Sidebar'
-import PlaylistContextProvider from '../contexts'
+import PlaylistContextProvider from '../contexts/PlaylistContext'
 
 const Home: NextPage = () => {
 	return (
