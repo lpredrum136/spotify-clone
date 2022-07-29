@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
 import { convertDuration } from '../utils/durationConverter'
 
@@ -11,8 +12,27 @@ const Song = ({
 }) => {
 	const spotifyApi = useSpotify()
 
+	const {
+		songContextState: { selectedSongId, isPlaying },
+		updateSongContextState
+	} = useSongContext()
+
+	const playSong = () => {
+		updateSongContextState({
+			selectedSongId: track?.id,
+			isPlaying: true
+		})
+
+		spotifyApi.play({
+			uris: [track?.uri as string]
+		})
+	}
+
 	return (
-		<div className='grid grid-cols-2 text-gray-500 px-5 py-4 hover:bg-gray-900 rounded-lg cursor-pointer'>
+		<div
+			className='grid grid-cols-2 text-gray-500 px-5 py-4 hover:bg-gray-900 rounded-lg cursor-pointer'
+			onClick={playSong}
+		>
 			<div className='flex items-center space-x-4'>
 				<p>{itemIndex + 1}</p>
 				<div>

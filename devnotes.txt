@@ -17,7 +17,7 @@ https://developer.spotify.com/
 Dashboard
 Create new app
 (according to https://next-auth.js.org/configuration/providers/oauth#how-to)
-Edit settings => Redirect URIs: http;//localhost:3000/api/auth/callback/spotify
+Edit settings => Redirect URIs: http://localhost:3000/api/auth/callback/spotify
 
 Note: Only play/pause will work (search for playback in spotify dev Dashboard)
 https://developer.spotify.com/design/controls/
