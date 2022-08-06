@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 						<Center />
 					</main>
 
-					<div className='sticky bottom-0'>
+					<div className='sticky bottom-0 text-white'>
 						<Player />
 					</div>
 				</SongContextProvider>

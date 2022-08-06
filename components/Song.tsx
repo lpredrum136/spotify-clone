@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { usePlaylistContext } from '../contexts/PlaylistContext'
 import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
 import { convertDuration } from '../utils/durationConverter'
@@ -17,6 +18,10 @@ const Song = ({
 		updateSongContextState
 	} = useSongContext()
 
+	const {
+		playlistContextState: { selectedPlaylist }
+	} = usePlaylistContext()
+
 	const playSong = () => {
 		updateSongContextState({
 			selectedSongId: track?.id,
@@ -25,7 +30,11 @@ const Song = ({
 		})
 
 		spotifyApi.play({
-			uris: [track?.uri as string]
+			// uris: [track?.uri as string]
+			context_uri: selectedPlaylist?.uri,
+			offset: {
+				uri: track?.uri as string
+			}
 		})
 	}
 

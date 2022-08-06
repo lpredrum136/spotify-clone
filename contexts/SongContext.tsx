@@ -13,6 +13,7 @@ interface SongContextState {
 	selectedSongId: string | null
 	selectedSong: SpotifyApi.TrackObjectFull | null
 	isPlaying: boolean
+	volume: number
 }
 
 interface ISongContext {
@@ -20,10 +21,11 @@ interface ISongContext {
 	updateSongContextState: (updatedObj: Partial<SongContextState>) => void
 }
 
-const defaultSongContextState: ISongContext['songContextState'] = {
+export const defaultSongContextState: ISongContext['songContextState'] = {
 	selectedSongId: null,
 	selectedSong: null,
-	isPlaying: false
+	isPlaying: false,
+	volume: 50
 }
 
 export const SongContext = createContext<ISongContext>({
@@ -58,7 +60,10 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 
 			if (songInfo.body) {
 				updateSongContextState({
-					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull
+					selectedSongId: songInfo.body.item?.id,
+					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
+					isPlaying: songInfo.body.is_playing,
+					volume: defaultSongContextState.volume
 				})
 			}
 		}

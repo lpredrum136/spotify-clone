@@ -67,7 +67,7 @@ const Center = () => {
 						className='rounded-full object-cover'
 					/>
 					<h2>{session?.user?.name}</h2>
-					<ChevronDownIcon className='h-5 w-5' />
+					<ChevronDownIcon className='icon' />
 				</div>
 			</header>
 

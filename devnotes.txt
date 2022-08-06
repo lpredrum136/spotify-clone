@@ -53,3 +53,6 @@ See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
 
 Khi try to play for the first time gap loi no active player, bat spotify that len, de no detect cai player do,
 roi sau do se co the chon bai tu localhost
+
+PLAYBACK PLAYGROUND
+https://developer.spotify.com/console/post-next/

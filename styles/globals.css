@@ -19,6 +19,16 @@ a {
 	box-sizing: border-box;
 } */
 
+@layer components {
+	.icon {
+		@apply h-5 w-5;
+	}
+
+	.icon-playback {
+		@apply icon cursor-pointer hover:scale-125;
+	}
+}
+
 @layer utilities {
 	.scrollbar-hidden {
 		/* Hide scrollbar for Chrome, Safari and Opera */

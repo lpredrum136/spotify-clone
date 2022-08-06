@@ -15,7 +15,7 @@ const IconButton = ({
 			className='flex items-center space-x-2 hover:text-white'
 			onClick={onClick}
 		>
-			<Icon className='h-5 w-5' />
+			<Icon className='icon' />
 			<span>{label}</span>
 		</button>
 	)
