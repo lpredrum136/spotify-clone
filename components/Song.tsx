@@ -20,6 +20,7 @@ const Song = ({
 	const playSong = () => {
 		updateSongContextState({
 			selectedSongId: track?.id,
+			selectedSong: track,
 			isPlaying: true
 		})
 

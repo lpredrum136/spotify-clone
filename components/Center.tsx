@@ -46,8 +46,8 @@ const Center = () => {
 		}
 	}, [
 		playlistContextState.selectedPlaylistId,
-		spotifyApi
-		// updatePlaylistContextState
+		spotifyApi,
+		updatePlaylistContextState
 	])
 
 	return (

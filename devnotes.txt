@@ -50,3 +50,6 @@ https://tailwindcss.com/docs/using-with-preprocessors#nesting
 ERROR WHEN TRYING TO ACCESS USER AVATAR IMAGES
 Invalid src prop (https://i.scdn.co/image/ab6775700000ee85cbc5be5b843a437ab657ee8d) on `next/image`, hostname "i.scdn.co" is not configured under images in your `next.config.js`
 See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+
+Khi try to play for the first time gap loi no active player, bat spotify that len, de no detect cai player do,
+roi sau do se co the chon bai tu localhost

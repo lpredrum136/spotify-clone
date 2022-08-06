@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from 'react'
+import {
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useState
+} from 'react'
 
 interface PlaylistContextState {
 	selectedPlaylistId: string | null
@@ -28,14 +34,15 @@ const PlaylistContextProvider = ({ children }: { children: ReactNode }) => {
 	const [playlistContextState, setPlaylistContextState] =
 		useState<PlaylistContextState>(defaultPlaylistContextState)
 
-	const updatePlaylistContextState = (
-		updatedObj: Partial<PlaylistContextState>
-	) => {
-		setPlaylistContextState({
-			...playlistContextState,
-			...updatedObj
-		})
-	}
+	const updatePlaylistContextState = useCallback(
+		(updatedObj: Partial<PlaylistContextState>) => {
+			setPlaylistContextState(previousPlaylistContextState => ({
+				...previousPlaylistContextState,
+				...updatedObj
+			}))
+		},
+		[]
+	)
 
 	const playlistContextProviderData = {
 		playlistContextState,
