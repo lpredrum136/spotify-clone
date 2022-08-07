@@ -6,7 +6,12 @@ import {
 	useSongContext
 } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
-import { RewindIcon, SwitchHorizontalIcon } from '@heroicons/react/solid'
+import {
+	PauseIcon,
+	PlayIcon,
+	RewindIcon,
+	SwitchHorizontalIcon
+} from '@heroicons/react/solid'
 
 const Player = () => {
 	const spotifyApi = useSpotify()
@@ -15,6 +20,10 @@ const Player = () => {
 		songContextState: { isPlaying, selectedSongId, selectedSong },
 		updateSongContextState
 	} = useSongContext()
+
+	const handlePlayPause = () => {
+		spotifyApi.play()
+	}
 
 	return (
 		<div className='h-24 bg-gradient-to-b from-black to-gray-900 grid grid-cols-3 text-xs md:text-base px-2 md:px-8'>
@@ -39,7 +48,7 @@ const Player = () => {
 			</div>
 
 			{/* Center */}
-			<div>
+			<div className='flex justify-evenly items-center'>
 				<SwitchHorizontalIcon className='icon-playback' />
 				<RewindIcon
 					className='icon-playback'
@@ -58,6 +67,11 @@ const Player = () => {
 						}
 					}}
 				/>
+				{isPlaying ? (
+					<PauseIcon className='icon-playback' onClick={handlePlayPause} />
+				) : (
+					<PlayIcon className='icon-playback' onClick={handlePlayPause} />
+				)}
 			</div>
 		</div>
 	)
