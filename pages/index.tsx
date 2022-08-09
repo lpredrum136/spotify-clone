@@ -8,8 +8,7 @@ import SongContextProvider from '../contexts/SongContext'
 
 const Home: NextPage = () => {
 	return (
-		// TODO: this div has overflow-hidden, but let's see how it goes
-		<div className='bg-black h-screen'>
+		<div className='bg-black h-screen overflow-hidden'>
 			<PlaylistContextProvider>
 				<SongContextProvider>
 					<Head>

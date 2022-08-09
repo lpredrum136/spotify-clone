@@ -14,6 +14,7 @@ interface SongContextState {
 	selectedSong: SpotifyApi.TrackObjectFull | null
 	isPlaying: boolean
 	volume: number
+	deviceId: string | null
 }
 
 interface ISongContext {
@@ -25,7 +26,8 @@ export const defaultSongContextState: ISongContext['songContextState'] = {
 	selectedSongId: null,
 	selectedSong: null,
 	isPlaying: false,
-	volume: 50
+	volume: 50,
+	deviceId: null
 }
 
 export const SongContext = createContext<ISongContext>({
@@ -55,6 +57,26 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 	)
 
 	useEffect(() => {
+		const setCurrentDevice = async () => {
+			const availableDevicesResponse = await spotifyApi.getMyDevices()
+
+			if (availableDevicesResponse.body.devices.length) {
+				console.log(availableDevicesResponse.body.devices[0])
+				const { id: deviceId, volume_percent } =
+					availableDevicesResponse.body.devices[0]
+				updateSongContextState({
+					deviceId,
+					volume: volume_percent as number
+				})
+
+				await spotifyApi.transferMyPlayback([deviceId as string])
+			}
+		}
+
+		if (spotifyApi.getAccessToken()) setCurrentDevice()
+	}, [spotifyApi, updateSongContextState, session])
+
+	useEffect(() => {
 		const getCurrentPlayingSong = async () => {
 			const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
@@ -63,7 +85,7 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 					selectedSongId: songInfo.body.item?.id,
 					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
 					isPlaying: songInfo.body.is_playing,
-					volume: defaultSongContextState.volume
+					volume: songInfo.body.device.volume_percent as number
 				})
 			}
 		}

@@ -9,7 +9,7 @@ INSTALL STUFF
 Heroicons recommended by tailwindcss, 
 Next Auth
 spotify web api wrapper
-yarn add @heroicons/react next-auth spotify-web-api-node
+yarn add @heroicons/react next-auth spotify-web-api-node use-debounce
 yarn add -D @types/spotify-web-api-node
 - Node version error when installing next-auth and spotify-web-api-node? nvm use 16
 

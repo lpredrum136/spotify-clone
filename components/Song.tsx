@@ -14,7 +14,7 @@ const Song = ({
 	const spotifyApi = useSpotify()
 
 	const {
-		songContextState: { selectedSongId, isPlaying },
+		songContextState: { deviceId },
 		updateSongContextState
 	} = useSongContext()
 
@@ -22,20 +22,23 @@ const Song = ({
 		playlistContextState: { selectedPlaylist }
 	} = usePlaylistContext()
 
-	const playSong = () => {
-		updateSongContextState({
-			selectedSongId: track?.id,
-			selectedSong: track,
-			isPlaying: true
-		})
+	const playSong = async () => {
+		if (deviceId) {
+			updateSongContextState({
+				selectedSongId: track?.id,
+				selectedSong: track,
+				isPlaying: true
+			})
 
-		spotifyApi.play({
-			// uris: [track?.uri as string]
-			context_uri: selectedPlaylist?.uri,
-			offset: {
-				uri: track?.uri as string
-			}
-		})
+			await spotifyApi.play({
+				// uris: [track?.uri as string]
+				device_id: deviceId,
+				context_uri: selectedPlaylist?.uri,
+				offset: {
+					uri: track?.uri as string
+				}
+			})
+		}
 	}
 
 	return (

@@ -1,29 +1,48 @@
-import { useSession } from 'next-auth/react'
+import {
+	FastForwardIcon,
+	PauseIcon,
+	PlayIcon,
+	ReplyIcon,
+	RewindIcon,
+	SwitchHorizontalIcon,
+	VolumeUpIcon
+} from '@heroicons/react/solid'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
+import { usePlaylistContext } from '../contexts/PlaylistContext'
 import {
 	defaultSongContextState,
 	useSongContext
 } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
-import {
-	PauseIcon,
-	PlayIcon,
-	RewindIcon,
-	SwitchHorizontalIcon
-} from '@heroicons/react/solid'
 
 const Player = () => {
 	const spotifyApi = useSpotify()
-	const { data: session, status } = useSession()
 	const {
-		songContextState: { isPlaying, selectedSongId, selectedSong },
+		songContextState: { isPlaying, selectedSong, volume, deviceId },
 		updateSongContextState
 	} = useSongContext()
 
-	const handlePlayPause = () => {
-		spotifyApi.play()
+	const {
+		playlistContextState: { selectedPlaylistId }
+	} = usePlaylistContext()
+
+	const handlePlayPause = async () => {
+		const response = await spotifyApi.getMyCurrentPlaybackState()
+		if (response.body) {
+			if (response.body.is_playing) {
+				await spotifyApi.pause()
+				updateSongContextState({ isPlaying: false })
+			} else {
+				await spotifyApi.play()
+				updateSongContextState({ isPlaying: true })
+			}
+		}
 	}
+
+	const debouncedAdjustVolume = useDebouncedCallback((volume: number) => {
+		spotifyApi.setVolume(volume)
+	}, 1000)
 
 	return (
 		<div className='h-24 bg-gradient-to-b from-black to-gray-900 grid grid-cols-3 text-xs md:text-base px-2 md:px-8'>
@@ -53,17 +72,20 @@ const Player = () => {
 				<RewindIcon
 					className='icon-playback'
 					onClick={async () => {
-						await spotifyApi.skipToPrevious()
+						if (deviceId) {
+							await spotifyApi.skipToPrevious()
 
-						const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
+							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
-						if (songInfo.body) {
-							updateSongContextState({
-								selectedSongId: songInfo.body.item?.id,
-								selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
-								isPlaying: songInfo.body.is_playing,
-								volume: defaultSongContextState.volume
-							})
+							if (songInfo.body) {
+								updateSongContextState({
+									selectedSongId: songInfo.body.item?.id,
+									selectedSong: songInfo.body
+										.item as SpotifyApi.TrackObjectFull,
+									isPlaying: songInfo.body.is_playing,
+									volume: defaultSongContextState.volume
+								})
+							}
 						}
 					}}
 				/>
@@ -72,6 +94,47 @@ const Player = () => {
 				) : (
 					<PlayIcon className='icon-playback' onClick={handlePlayPause} />
 				)}
+				<FastForwardIcon
+					className='icon-playback'
+					onClick={async () => {
+						if (deviceId) {
+							await spotifyApi.skipToNext()
+
+							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
+
+							if (songInfo.body) {
+								updateSongContextState({
+									selectedSongId: songInfo.body.item?.id,
+									selectedSong: songInfo.body
+										.item as SpotifyApi.TrackObjectFull,
+									isPlaying: songInfo.body.is_playing,
+									volume: defaultSongContextState.volume
+								})
+							}
+						}
+					}}
+				/>
+				<ReplyIcon className='icon-playback' />
+			</div>
+
+			{/* Right */}
+			<div className='flex justify-end items-center pr-5 space-x-3 md:space-x-4'>
+				<VolumeUpIcon className='icon-playback' />
+				<input
+					type='range'
+					min={0}
+					max={100}
+					className='w-20 md:w-auto'
+					value={volume}
+					onChange={event => {
+						const volume = Number(event.target.value)
+						updateSongContextState({ volume })
+
+						if (deviceId) {
+							debouncedAdjustVolume(volume)
+						}
+					}}
+				/>
 			</div>
 		</div>
 	)
