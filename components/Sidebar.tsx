@@ -6,8 +6,6 @@ import {
 	RssIcon,
 	SearchIcon
 } from '@heroicons/react/outline'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
 import { usePlaylistContext } from '../contexts/PlaylistContext'
 import useSpotify from '../hooks/useSpotify'
 import IconButton from './IconButton'
@@ -15,29 +13,11 @@ import IconButton from './IconButton'
 const Divider = () => <hr className='border-t-[0.1px] border-gray-900' />
 
 const Sidebar = () => {
-	const { data: session, status } = useSession()
-	const [playlists, setPlaylists] = useState<
-		SpotifyApi.PlaylistObjectSimplified[]
-	>([])
 	const spotifyApi = useSpotify()
-	const { updatePlaylistContextState } = usePlaylistContext()
-
-	useEffect(() => {
-		const getUserPlaylists = async () => {
-			const userPlaylistsResponse = await spotifyApi.getUserPlaylists()
-			setPlaylists(userPlaylistsResponse.body.items)
-		}
-
-		if (spotifyApi.getAccessToken()) {
-			getUserPlaylists()
-		}
-	}, [spotifyApi, session])
-
-	// If this console log returns null, it means we are not logged in
-	// if it's undefined, session has not been fetched yet
-	// https://next-auth.js.org/getting-started/client#usesession
-
-	// console.log('SESSION', session)
+	const {
+		playlistContextState: { playlists },
+		updatePlaylistContextState
+	} = usePlaylistContext()
 
 	return (
 		<div className='text-gray-500 px-5 pt-5 pb-36 text-xs lg:text-sm border-r border-gray-900 h-screen overflow-y-scroll scrollbar-hidden sm:max-w-[12rem] lg:max-w-[15rem] hidden md:block'>

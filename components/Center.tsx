@@ -21,8 +21,7 @@ const colours = [
 const Center = () => {
 	const { data: session } = useSession()
 	const [fromColour, setFromColour] = useState<string | null>(null)
-	const { playlistContextState, updatePlaylistContextState } =
-		usePlaylistContext()
+	const { playlistContextState } = usePlaylistContext()
 	const spotifyApi = useSpotify()
 
 	useEffect(() => {
