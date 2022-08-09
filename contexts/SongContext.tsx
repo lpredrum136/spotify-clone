@@ -80,12 +80,13 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		const getCurrentPlayingSong = async () => {
 			const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
+			console.log('SONG INFO', songInfo)
+
 			if (songInfo.body) {
 				updateSongContextState({
 					selectedSongId: songInfo.body.item?.id,
 					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
-					isPlaying: songInfo.body.is_playing,
-					volume: songInfo.body.device.volume_percent as number
+					isPlaying: songInfo.body.is_playing
 				})
 			}
 		}
