@@ -82,8 +82,7 @@ const Player = () => {
 									selectedSongId: songInfo.body.item?.id,
 									selectedSong: songInfo.body
 										.item as SpotifyApi.TrackObjectFull,
-									isPlaying: songInfo.body.is_playing,
-									volume: defaultSongContextState.volume
+									isPlaying: songInfo.body.is_playing
 								})
 							}
 						}
@@ -107,8 +106,7 @@ const Player = () => {
 									selectedSongId: songInfo.body.item?.id,
 									selectedSong: songInfo.body
 										.item as SpotifyApi.TrackObjectFull,
-									isPlaying: songInfo.body.is_playing,
-									volume: defaultSongContextState.volume
+									isPlaying: songInfo.body.is_playing
 								})
 							}
 						}

@@ -61,9 +61,9 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 			const availableDevicesResponse = await spotifyApi.getMyDevices()
 
 			if (availableDevicesResponse.body.devices.length) {
-				console.log(availableDevicesResponse.body.devices[0])
 				const { id: deviceId, volume_percent } =
 					availableDevicesResponse.body.devices[0]
+
 				updateSongContextState({
 					deviceId,
 					volume: volume_percent as number
@@ -79,8 +79,6 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 	useEffect(() => {
 		const getCurrentPlayingSong = async () => {
 			const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
-
-			console.log('SONG INFO', songInfo)
 
 			if (songInfo.body) {
 				updateSongContextState({

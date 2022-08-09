@@ -59,8 +59,12 @@ const Sidebar = () => {
 					<p
 						key={id}
 						className='cursor-pointer hover:text-white'
-						onClick={() => {
-							updatePlaylistContextState({ selectedPlaylistId: id })
+						onClick={async () => {
+							const playlistResponse = await spotifyApi.getPlaylist(id)
+							updatePlaylistContextState({
+								selectedPlaylistId: id,
+								selectedPlaylist: playlistResponse.body
+							})
 						}}
 					>
 						{name}

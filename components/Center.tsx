@@ -29,27 +29,6 @@ const Center = () => {
 		setFromColour(pickRandom(colours))
 	}, [playlistContextState.selectedPlaylistId])
 
-	useEffect(() => {
-		const getPlaylist = async () => {
-			try {
-				const playlistResponse = await spotifyApi.getPlaylist(
-					playlistContextState.selectedPlaylistId as string
-				)
-				updatePlaylistContextState({ selectedPlaylist: playlistResponse.body })
-			} catch (error) {
-				console.error('Error. Failed to fetch playlist. ', error)
-			}
-		}
-
-		if (playlistContextState.selectedPlaylistId) {
-			getPlaylist()
-		}
-	}, [
-		playlistContextState.selectedPlaylistId,
-		spotifyApi,
-		updatePlaylistContextState
-	])
-
 	return (
 		<div className='flex-grow text-white relative h-screen overflow-y-scroll scrollbar-hidden'>
 			<header className='absolute top-5 right-8'>
