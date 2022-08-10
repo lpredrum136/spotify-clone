@@ -46,15 +46,12 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		defaultSongContextState
 	)
 
-	const updateSongContextState = useCallback(
-		(updatedObj: Partial<SongContextState>) => {
-			setSongContextState(previousSongContextState => ({
-				...previousSongContextState,
-				...updatedObj
-			}))
-		},
-		[]
-	)
+	const updateSongContextState = (updatedObj: Partial<SongContextState>) => {
+		setSongContextState(previousSongContextState => ({
+			...previousSongContextState,
+			...updatedObj
+		}))
+	}
 
 	useEffect(() => {
 		const setCurrentDevice = async () => {
@@ -74,7 +71,7 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		}
 
 		if (spotifyApi.getAccessToken()) setCurrentDevice()
-	}, [spotifyApi, updateSongContextState, session])
+	}, [spotifyApi, session])
 
 	useEffect(() => {
 		const getCurrentPlayingSong = async () => {
@@ -92,12 +89,7 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		if (spotifyApi.getAccessToken() && !songContextState.selectedSongId) {
 			getCurrentPlayingSong()
 		}
-	}, [
-		songContextState.selectedSongId,
-		spotifyApi,
-		updateSongContextState,
-		session
-	])
+	}, [songContextState.selectedSongId, spotifyApi, session])
 
 	const songContextProviderData = {
 		songContextState,
