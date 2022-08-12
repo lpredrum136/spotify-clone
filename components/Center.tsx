@@ -22,7 +22,6 @@ const Center = () => {
 	const { data: session } = useSession()
 	const [fromColour, setFromColour] = useState<string | null>(null)
 	const { playlistContextState } = usePlaylistContext()
-	const spotifyApi = useSpotify()
 
 	useEffect(() => {
 		setFromColour(pickRandom(colours))
