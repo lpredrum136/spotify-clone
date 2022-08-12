@@ -8,6 +8,7 @@ import {
 	VolumeUpIcon
 } from '@heroicons/react/solid'
 import Image from 'next/image'
+import { ChangeEventHandler } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
@@ -22,26 +23,59 @@ const Player = () => {
 
 	const handlePlayPause = async () => {
 		const response = await spotifyApi.getMyCurrentPlaybackState()
-		if (response.body) {
-			if (response.body.is_playing) {
-				await spotifyApi.pause()
-				dispatchSongAction({
-					type: SongReducerActionType.ToggleIsPlaying,
-					payload: false
-				})
-			} else {
-				await spotifyApi.play()
-				dispatchSongAction({
-					type: SongReducerActionType.ToggleIsPlaying,
-					payload: true
-				})
-			}
+		if (!response.body) return
+
+		if (response.body.is_playing) {
+			await spotifyApi.pause()
+			dispatchSongAction({
+				type: SongReducerActionType.ToggleIsPlaying,
+				payload: false
+			})
+		} else {
+			await spotifyApi.play()
+			dispatchSongAction({
+				type: SongReducerActionType.ToggleIsPlaying,
+				payload: true
+			})
+		}
+	}
+
+	const handleSkipSong = async (skipTo: 'previous' | 'next') => {
+		if (!deviceId) return
+
+		if (skipTo === 'previous') await spotifyApi.skipToPrevious()
+		else await spotifyApi.skipToNext()
+
+		const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
+
+		if (songInfo.body) {
+			dispatchSongAction({
+				type: SongReducerActionType.SetCurrentPlayingSong,
+				payload: {
+					selectedSongId: songInfo.body.item?.id,
+					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
+					isPlaying: songInfo.body.is_playing
+				}
+			})
 		}
 	}
 
 	const debouncedAdjustVolume = useDebouncedCallback((volume: number) => {
 		spotifyApi.setVolume(volume)
 	}, 1000)
+
+	const handleVolumeChange: ChangeEventHandler<HTMLInputElement> = event => {
+		const volume = Number(event.target.value)
+
+		if (!deviceId) return
+
+		debouncedAdjustVolume(volume)
+
+		dispatchSongAction({
+			type: SongReducerActionType.SetVolume,
+			payload: volume
+		})
+	}
 
 	return (
 		<div className='h-24 bg-gradient-to-b from-black to-gray-900 grid grid-cols-3 text-xs md:text-base px-2 md:px-8'>
@@ -70,25 +104,7 @@ const Player = () => {
 				<SwitchHorizontalIcon className='icon-playback' />
 				<RewindIcon
 					className='icon-playback'
-					onClick={async () => {
-						if (deviceId) {
-							await spotifyApi.skipToPrevious()
-
-							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
-
-							if (songInfo.body) {
-								dispatchSongAction({
-									type: SongReducerActionType.SetCurrentPlayingSong,
-									payload: {
-										selectedSongId: songInfo.body.item?.id,
-										selectedSong: songInfo.body
-											.item as SpotifyApi.TrackObjectFull,
-										isPlaying: songInfo.body.is_playing
-									}
-								})
-							}
-						}
-					}}
+					onClick={handleSkipSong.bind(this, 'previous')}
 				/>
 				{isPlaying ? (
 					<PauseIcon className='icon-playback' onClick={handlePlayPause} />
@@ -97,25 +113,7 @@ const Player = () => {
 				)}
 				<FastForwardIcon
 					className='icon-playback'
-					onClick={async () => {
-						if (deviceId) {
-							await spotifyApi.skipToNext()
-
-							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
-
-							if (songInfo.body) {
-								dispatchSongAction({
-									type: SongReducerActionType.SetCurrentPlayingSong,
-									payload: {
-										selectedSongId: songInfo.body.item?.id,
-										selectedSong: songInfo.body
-											.item as SpotifyApi.TrackObjectFull,
-										isPlaying: songInfo.body.is_playing
-									}
-								})
-							}
-						}
-					}}
+					onClick={handleSkipSong.bind(this, 'next')}
 				/>
 				<ReplyIcon className='icon-playback' />
 			</div>
@@ -129,17 +127,7 @@ const Player = () => {
 					max={100}
 					className='w-20 md:w-auto'
 					value={volume}
-					onChange={event => {
-						const volume = Number(event.target.value)
-						dispatchSongAction({
-							type: SongReducerActionType.SetVolume,
-							payload: volume
-						})
-
-						if (deviceId) {
-							debouncedAdjustVolume(volume)
-						}
-					}}
+					onChange={handleVolumeChange}
 				/>
 			</div>
 		</div>
