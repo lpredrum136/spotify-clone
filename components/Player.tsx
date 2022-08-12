@@ -48,16 +48,16 @@ const Player = () => {
 
 		const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
-		if (songInfo.body) {
-			dispatchSongAction({
-				type: SongReducerActionType.SetCurrentPlayingSong,
-				payload: {
-					selectedSongId: songInfo.body.item?.id,
-					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
-					isPlaying: songInfo.body.is_playing
-				}
-			})
-		}
+		if (!songInfo.body) return
+
+		dispatchSongAction({
+			type: SongReducerActionType.SetCurrentPlayingSong,
+			payload: {
+				selectedSongId: songInfo.body.item?.id,
+				selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
+				isPlaying: songInfo.body.is_playing
+			}
+		})
 	}
 
 	const debouncedAdjustVolume = useDebouncedCallback((volume: number) => {

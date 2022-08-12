@@ -49,20 +49,20 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		const setCurrentDevice = async () => {
 			const availableDevicesResponse = await spotifyApi.getMyDevices()
 
-			if (availableDevicesResponse.body.devices.length) {
-				const { id: deviceId, volume_percent } =
-					availableDevicesResponse.body.devices[0]
+			if (!availableDevicesResponse.body.devices.length) return
 
-				dispatchSongAction({
-					type: SongReducerActionType.SetDevice,
-					payload: {
-						deviceId,
-						volume: volume_percent as number
-					}
-				})
+			const { id: deviceId, volume_percent } =
+				availableDevicesResponse.body.devices[0]
 
-				await spotifyApi.transferMyPlayback([deviceId as string])
-			}
+			dispatchSongAction({
+				type: SongReducerActionType.SetDevice,
+				payload: {
+					deviceId,
+					volume: volume_percent as number
+				}
+			})
+
+			await spotifyApi.transferMyPlayback([deviceId as string])
 		}
 
 		if (spotifyApi.getAccessToken()) setCurrentDevice()
@@ -72,16 +72,16 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 		const getCurrentPlayingSong = async () => {
 			const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
-			if (songInfo.body) {
-				dispatchSongAction({
-					type: SongReducerActionType.SetCurrentPlayingSong,
-					payload: {
-						selectedSongId: songInfo.body.item?.id,
-						selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
-						isPlaying: songInfo.body.is_playing
-					}
-				})
-			}
+			if (!songInfo.body) return
+
+			dispatchSongAction({
+				type: SongReducerActionType.SetCurrentPlayingSong,
+				payload: {
+					selectedSongId: songInfo.body.item?.id,
+					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
+					isPlaying: songInfo.body.is_playing
+				}
+			})
 		}
 
 		if (spotifyApi.getAccessToken() && !songContextState.selectedSongId) {

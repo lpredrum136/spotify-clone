@@ -24,25 +24,25 @@ const Song = ({
 	} = usePlaylistContext()
 
 	const playSong = async () => {
-		if (deviceId) {
-			dispatchSongAction({
-				type: SongReducerActionType.SetCurrentPlayingSong,
-				payload: {
-					selectedSongId: track?.id,
-					selectedSong: track,
-					isPlaying: true
-				}
-			})
+		if (!deviceId) return
 
-			await spotifyApi.play({
-				// uris: [track?.uri as string]
-				device_id: deviceId,
-				context_uri: selectedPlaylist?.uri,
-				offset: {
-					uri: track?.uri as string
-				}
-			})
-		}
+		dispatchSongAction({
+			type: SongReducerActionType.SetCurrentPlayingSong,
+			payload: {
+				selectedSongId: track?.id,
+				selectedSong: track,
+				isPlaying: true
+			}
+		})
+
+		await spotifyApi.play({
+			// uris: [track?.uri as string]
+			device_id: deviceId,
+			context_uri: selectedPlaylist?.uri,
+			offset: {
+				uri: track?.uri as string
+			}
+		})
 	}
 
 	return (
