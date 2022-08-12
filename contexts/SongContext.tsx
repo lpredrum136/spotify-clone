@@ -1,29 +1,27 @@
 import { useSession } from 'next-auth/react'
 import {
 	createContext,
+	Dispatch,
 	ReactNode,
-	useCallback,
 	useContext,
 	useEffect,
-	useState
+	useReducer
 } from 'react'
 import useSpotify from '../hooks/useSpotify'
-
-interface SongContextState {
-	selectedSongId: string | null
-	selectedSong: SpotifyApi.TrackObjectFull | null
-	isPlaying: boolean
-	volume: number
-	deviceId: string | null
-}
+import {
+	SongContextState,
+	songReducer,
+	SongReducerAction,
+	SongReducerActionType
+} from '../reducers/songReducer'
 
 interface ISongContext {
 	songContextState: SongContextState
-	updateSongContextState: (updatedObj: Partial<SongContextState>) => void
+	dispatchSongAction: Dispatch<SongReducerAction>
 }
 
 export const defaultSongContextState: ISongContext['songContextState'] = {
-	selectedSongId: null,
+	selectedSongId: undefined,
 	selectedSong: null,
 	isPlaying: false,
 	volume: 50,
@@ -32,7 +30,7 @@ export const defaultSongContextState: ISongContext['songContextState'] = {
 
 export const SongContext = createContext<ISongContext>({
 	songContextState: defaultSongContextState,
-	updateSongContextState: () => {}
+	dispatchSongAction: () => {}
 })
 
 export const useSongContext = () => useContext(SongContext)
@@ -42,16 +40,10 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 
 	const { data: session } = useSession()
 
-	const [songContextState, setSongContextState] = useState<SongContextState>(
+	const [songContextState, dispatchSongAction] = useReducer(
+		songReducer,
 		defaultSongContextState
 	)
-
-	const updateSongContextState = (updatedObj: Partial<SongContextState>) => {
-		setSongContextState(previousSongContextState => ({
-			...previousSongContextState,
-			...updatedObj
-		}))
-	}
 
 	useEffect(() => {
 		const setCurrentDevice = async () => {
@@ -61,9 +53,12 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 				const { id: deviceId, volume_percent } =
 					availableDevicesResponse.body.devices[0]
 
-				updateSongContextState({
-					deviceId,
-					volume: volume_percent as number
+				dispatchSongAction({
+					type: SongReducerActionType.SetDevice,
+					payload: {
+						deviceId,
+						volume: volume_percent as number
+					}
 				})
 
 				await spotifyApi.transferMyPlayback([deviceId as string])
@@ -78,10 +73,13 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 			const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
 			if (songInfo.body) {
-				updateSongContextState({
-					selectedSongId: songInfo.body.item?.id,
-					selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
-					isPlaying: songInfo.body.is_playing
+				dispatchSongAction({
+					type: SongReducerActionType.SetCurrentPlayingSong,
+					payload: {
+						selectedSongId: songInfo.body.item?.id,
+						selectedSong: songInfo.body.item as SpotifyApi.TrackObjectFull,
+						isPlaying: songInfo.body.is_playing
+					}
 				})
 			}
 		}
@@ -93,7 +91,7 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 
 	const songContextProviderData = {
 		songContextState,
-		updateSongContextState
+		dispatchSongAction
 	}
 
 	return (

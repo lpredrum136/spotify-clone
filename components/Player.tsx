@@ -11,12 +11,13 @@ import Image from 'next/image'
 import { useDebouncedCallback } from 'use-debounce'
 import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
+import { SongReducerActionType } from '../reducers/songReducer'
 
 const Player = () => {
 	const spotifyApi = useSpotify()
 	const {
 		songContextState: { isPlaying, selectedSong, volume, deviceId },
-		updateSongContextState
+		dispatchSongAction
 	} = useSongContext()
 
 	const handlePlayPause = async () => {
@@ -24,10 +25,16 @@ const Player = () => {
 		if (response.body) {
 			if (response.body.is_playing) {
 				await spotifyApi.pause()
-				updateSongContextState({ isPlaying: false })
+				dispatchSongAction({
+					type: SongReducerActionType.ToggleIsPlaying,
+					payload: false
+				})
 			} else {
 				await spotifyApi.play()
-				updateSongContextState({ isPlaying: true })
+				dispatchSongAction({
+					type: SongReducerActionType.ToggleIsPlaying,
+					payload: true
+				})
 			}
 		}
 	}
@@ -70,11 +77,14 @@ const Player = () => {
 							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
 							if (songInfo.body) {
-								updateSongContextState({
-									selectedSongId: songInfo.body.item?.id,
-									selectedSong: songInfo.body
-										.item as SpotifyApi.TrackObjectFull,
-									isPlaying: songInfo.body.is_playing
+								dispatchSongAction({
+									type: SongReducerActionType.SetCurrentPlayingSong,
+									payload: {
+										selectedSongId: songInfo.body.item?.id,
+										selectedSong: songInfo.body
+											.item as SpotifyApi.TrackObjectFull,
+										isPlaying: songInfo.body.is_playing
+									}
 								})
 							}
 						}
@@ -94,11 +104,14 @@ const Player = () => {
 							const songInfo = await spotifyApi.getMyCurrentPlayingTrack()
 
 							if (songInfo.body) {
-								updateSongContextState({
-									selectedSongId: songInfo.body.item?.id,
-									selectedSong: songInfo.body
-										.item as SpotifyApi.TrackObjectFull,
-									isPlaying: songInfo.body.is_playing
+								dispatchSongAction({
+									type: SongReducerActionType.SetCurrentPlayingSong,
+									payload: {
+										selectedSongId: songInfo.body.item?.id,
+										selectedSong: songInfo.body
+											.item as SpotifyApi.TrackObjectFull,
+										isPlaying: songInfo.body.is_playing
+									}
 								})
 							}
 						}
@@ -118,7 +131,10 @@ const Player = () => {
 					value={volume}
 					onChange={event => {
 						const volume = Number(event.target.value)
-						updateSongContextState({ volume })
+						dispatchSongAction({
+							type: SongReducerActionType.SetVolume,
+							payload: volume
+						})
 
 						if (deviceId) {
 							debouncedAdjustVolume(volume)

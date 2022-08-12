@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { usePlaylistContext } from '../contexts/PlaylistContext'
 import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
+import { SongReducerActionType } from '../reducers/songReducer'
 import { convertDuration } from '../utils/durationConverter'
 
 const Song = ({
@@ -15,7 +16,7 @@ const Song = ({
 
 	const {
 		songContextState: { deviceId },
-		updateSongContextState
+		dispatchSongAction
 	} = useSongContext()
 
 	const {
@@ -24,10 +25,13 @@ const Song = ({
 
 	const playSong = async () => {
 		if (deviceId) {
-			updateSongContextState({
-				selectedSongId: track?.id,
-				selectedSong: track,
-				isPlaying: true
+			dispatchSongAction({
+				type: SongReducerActionType.SetCurrentPlayingSong,
+				payload: {
+					selectedSongId: track?.id,
+					selectedSong: track,
+					isPlaying: true
+				}
 			})
 
 			await spotifyApi.play({
