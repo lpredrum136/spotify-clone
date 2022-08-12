@@ -7,6 +7,7 @@ import { pickRandom } from '../utils/pickRandom'
 import { usePlaylistContext } from '../contexts/PlaylistContext'
 import useSpotify from '../hooks/useSpotify'
 import Songs from './Songs'
+import kitty from '../public/kitty.jpg'
 
 const colours = [
 	'from-indigo-500',
@@ -50,7 +51,7 @@ const Center = () => {
 			</header>
 
 			<section
-				className={`flex items-end space-x-7 bg-gradient-to-b ${fromColour} to-black h-80 p-8`}
+				className={`flex items-end space-x-7 h-80 p-8 bg-[url('/kitty.jpg')]`}
 			>
 				{playlistContextState.selectedPlaylist && (
 					<>
