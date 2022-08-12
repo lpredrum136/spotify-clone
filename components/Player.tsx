@@ -9,11 +9,7 @@ import {
 } from '@heroicons/react/solid'
 import Image from 'next/image'
 import { useDebouncedCallback } from 'use-debounce'
-import { usePlaylistContext } from '../contexts/PlaylistContext'
-import {
-	defaultSongContextState,
-	useSongContext
-} from '../contexts/SongContext'
+import { useSongContext } from '../contexts/SongContext'
 import useSpotify from '../hooks/useSpotify'
 
 const Player = () => {
@@ -22,10 +18,6 @@ const Player = () => {
 		songContextState: { isPlaying, selectedSong, volume, deviceId },
 		updateSongContextState
 	} = useSongContext()
-
-	const {
-		playlistContextState: { selectedPlaylistId }
-	} = usePlaylistContext()
 
 	const handlePlayPause = async () => {
 		const response = await spotifyApi.getMyCurrentPlaybackState()
