@@ -60,9 +60,12 @@ const Player = () => {
 		})
 	}
 
-	const debouncedAdjustVolume = useDebouncedCallback((volume: number) => {
-		spotifyApi.setVolume(volume)
-	}, 1000)
+	const debouncedAdjustVolume = useDebouncedCallback<(volume: number) => void>(
+		volume => {
+			spotifyApi.setVolume(volume)
+		},
+		1000
+	)
 
 	const handleVolumeChange: ChangeEventHandler<HTMLInputElement> = event => {
 		const volume = Number(event.target.value)
